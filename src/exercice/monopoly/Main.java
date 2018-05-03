@@ -91,7 +91,7 @@ public class Main extends Application {
         // Log what is happening on the game by subscribing to the events
         gm.getPlayers().forEach(player -> player.gameOverOccurred.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Game Over")));
         gm.getPlayers().forEach(player -> player.balanceChanged.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Balance changed to " + p.getBalance())));
-        gm.getPlayers().forEach(player -> player.currentPropertyIndexChanged.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Payer moved to property n° " + p.getCurrentPropertyIndex())));
+        gm.getPlayers().forEach(player -> player.currentPropertyIndexChanged.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Player moved to property n° " + p.getCurrentPropertyIndex())));
         gm.getBoard().getProperties().forEach(property -> property.ownerChanged.add(p -> logger.log(Level.INFO, "Property n° " + p.getIndex() + " - Owner changed to " + (p.getOwner() == null ? "null" : p.getOwner().getName()))));
 
         // Setup the stage
@@ -185,6 +185,19 @@ public class Main extends Application {
             recapString.append(lastPlayerName).append(" a tiré un ").append(turnResult.diceRoll);
             // Where did he landed
             recapString.append(" et est tombé sur la case n°").append(turnResult.propertyLandedOn.getIndex());
+            boolean hasBalanceChanged = false;
+            if (turnResult.rentPayed != 0) {
+                // If the player payed a rent
+                // Display the money transfer
+                recapString.append("\nLoyer de ").append(turnResult.rentPayed).append("$ payé à ").append(turnResult.rentPayedTo);
+                hasBalanceChanged = true;
+            }
+            if (turnResult.propertyBought != 0) {
+                // If the player bought a property
+                // Display the acquisition
+                recapString.append("\nPropriété achetée au prix de ").append(turnResult.propertyBought).append("$");
+                hasBalanceChanged = true;
+            }
 
             if (turnResult.isPlayerGameOver) {
                 // If the game is over for this player as a result of this turn
@@ -195,6 +208,10 @@ public class Main extends Application {
                 propertyViews.get(turnResult.propertyLandedOn.getIndex()).hidePlayerIndicator(turnResult.playerIndex);
                 propertyViews.forEach(pv -> pv.removePlayer(turnResult.playerIndex));
                 ColorList.removeColorAt(turnResult.playerIndex);
+            } else if (hasBalanceChanged) {
+                // Else if the balance of the player has changed
+                // Display his remaining balance
+                recapString.append("\nSolde restant : ").append(gm.getPlayers().get(turnResult.playerIndex).getBalance()).append("$");
             }
 
             Text lastRecapText = new Text(recapString.toString());

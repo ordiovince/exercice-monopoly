@@ -58,6 +58,10 @@ public class GameManager {
         // Save the currentPlayerIndex value for use in the TurnResult
         int savedCurrentPlayer = currentPlayerIndex;
 
+        int rentPayed = 0;
+        String rentPayedTo = "";
+        int propertyBougth = 0;
+
         // Get the correct landed on property by loop through the list of properties on the board
         int propertyLandedOnIndex = (currentPlayer.getCurrentPropertyIndex() + diceRoll) % getBoard().getProperties().size();
 
@@ -72,6 +76,7 @@ public class GameManager {
                 // Buy the property
                 currentPlayer.modifyBalance(-propertyLandedOn.getPrice());
                 propertyLandedOn.setOwner(currentPlayer);
+                propertyBougth = propertyLandedOn.getPrice();
             }
         } else if (propertyLandedOn.getOwner() != currentPlayer) {
             // If the property is already owned by another player
@@ -91,6 +96,8 @@ public class GameManager {
                 // Pay the rent to the owner of the property
                 propertyLandedOn.getOwner().modifyBalance(propertyLandedOn.getRent());
                 currentPlayer.modifyBalance(-propertyLandedOn.getRent());
+                rentPayed = propertyLandedOn.getRent();
+                rentPayedTo = propertyLandedOn.getOwner().getName();
             }
         }
 
@@ -98,7 +105,7 @@ public class GameManager {
         currentPlayerIndex = (currentPlayerIndex + 1) % getPlayers().size();
 
         // Return the important values for this turn
-        return new TurnResult(savedCurrentPlayer, propertyLandedOn, diceRoll, isPlayerGameOver);
+        return new TurnResult(savedCurrentPlayer, propertyLandedOn, diceRoll, rentPayed, rentPayedTo, propertyBougth, isPlayerGameOver);
     }
 
     /**
@@ -143,6 +150,21 @@ public class GameManager {
         public final int diceRoll;
 
         /**
+         * The amount of money spent on rent
+         */
+        public final int rentPayed;
+
+        /**
+         * The player the rent has been payed to (if applicable)
+         */
+        public final String rentPayedTo;
+
+        /**
+         * The amount of money spent buying a property
+         */
+        public final int propertyBought;
+
+        /**
          * The state of the player gameOver (true is the game is over for the player as a result of this turn)
          */
         public final boolean isPlayerGameOver;
@@ -151,12 +173,18 @@ public class GameManager {
          * @param playerIndex      the index of the player that played this turn
          * @param propertyLandedOn the property the player as landed on
          * @param diceRoll         the score rolled by the player
+         * @param rentPayed        the amount of money spent on rent
+         * @param rentPayedTo      the player the rent has been payed to (if applicable)
+         * @param propertyBought   the amount of money spent buying a property
          * @param isPlayerGameOver the state of the player gameOver (true is the game is over for the player as a result of this turn)
          */
-        private TurnResult(int playerIndex, Property propertyLandedOn, int diceRoll, boolean isPlayerGameOver) {
+        private TurnResult(int playerIndex, Property propertyLandedOn, int diceRoll, int rentPayed, String rentPayedTo, int propertyBought, boolean isPlayerGameOver) {
             this.playerIndex = playerIndex;
             this.propertyLandedOn = propertyLandedOn;
             this.diceRoll = diceRoll;
+            this.rentPayed = rentPayed;
+            this.rentPayedTo = rentPayedTo;
+            this.propertyBought = propertyBought;
             this.isPlayerGameOver = isPlayerGameOver;
         }
     }
