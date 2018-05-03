@@ -42,7 +42,15 @@ public class Main extends Application {
 
     private Timeline fiveSecondsWonder = null;
 
+    private static int nbPlayers;
+
     public static void main(String[] args) throws Exception {
+
+        if (args.length > 0) {
+            nbPlayers = Integer.parseInt(args[0]);
+        } else {
+            nbPlayers = 4;
+        }
 
         Handler fh = new FileHandler("events.log", false);
         fh.setFormatter(new VerySimpleFormatter());
@@ -56,7 +64,7 @@ public class Main extends Application {
 
         logger.log(Level.INFO, "====== NEW GAME =====");
 
-        gm = new GameManager(4, 1500, 20, 100, 50);
+        gm = new GameManager(nbPlayers, 1500, 20, 100, 50);
 
         gm.getPlayers().forEach(player -> player.gameOverOccurred.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Game Over")));
         gm.getPlayers().forEach(player -> player.balanceChanged.add(p -> logger.log(Level.INFO, "Player " + p.getName() + " - Balance changed to " + p.getBalance())));
