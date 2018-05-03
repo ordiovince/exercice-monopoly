@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * NameList class a helper static class providing a list of names
  */
 public class NameList {
 
     //// Private Static Members ////
 
-    private static List<String> names = Arrays.asList(
+    private static final List<String> names = Arrays.asList(
             "Jacqualine",
             "Erin",
             "Angelika",
@@ -69,11 +69,16 @@ public class NameList {
     //// Public Static Functions ////
 
     /**
-     * @param index
-     * @return
+     * Return the name stored at this index in the list (shuffle the list first if it hasn't been done)
+     *
+     * @param index the index of the name to get
+     * @return the name stored at this index
      */
     public static String getNameAt(int index) {
         if (!hasBeenShuffled) {
+            // If the list hasn't been shuffled yet
+            hasBeenShuffled = true;
+            // Shuffle the list
             Collections.shuffle(names);
         }
 

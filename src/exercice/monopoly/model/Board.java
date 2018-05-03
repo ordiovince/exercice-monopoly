@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Board class representing the game board
  */
 public class Board {
 
     //// Private Members ////
 
-    private List<Property> properties;
+    private final List<Property> properties;
 
     //// Constructors ////
 
     /**
-     * @param nbProperties
-     * @param price
-     * @param rent
+     * @param nbProperties the number of properties to add to the board
+     * @param price        the price of each property
+     * @param rent         the price of the rent of each property
      */
     public Board(int nbProperties, int price, int rent) {
         properties = new ArrayList<>();
@@ -30,17 +30,22 @@ public class Board {
     //// Public Functions ////
 
     /**
-     * @return
+     * @return the list of properties
      */
     public List<Property> getProperties() {
         return properties;
     }
 
     /**
-     * @param index
-     * @return
+     * @param index the index of the property to get
+     * @return the property found at the index
      */
-    public Property getPropertiyAt(int index) {
+    public Property getPropertyAt(int index) {
+
+        if (index >= properties.size()) {
+            throw new IllegalArgumentException("index parameter must be within the bounds of the list of properties");
+        }
+
         return properties.get(index);
     }
 }

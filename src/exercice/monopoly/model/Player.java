@@ -12,21 +12,23 @@ public class Player {
     //// Events ////
 
     /**
-     *
+     * Event raised when the balance of the player has changed
      */
-    public List<Consumer<Player>> balanceChanged;
+    public final List<Consumer<Player>> balanceChanged;
+
     /**
-     *
+     * Event raised when the property the player is currently standing has changed
      */
-    public List<Consumer<Player>> currentPropertyIndexChanged;
+    public final List<Consumer<Player>> currentPropertyIndexChanged;
+
     /**
-     *
+     * Event raised when it is game over for the player
      */
-    public List<Consumer<Player>> gameOverOccurred;
+    public final List<Consumer<Player>> gameOverOccurred;
 
     //// Private Members ////
 
-    private String name;
+    private final String name;
     private int balance;
     private int currentPropertyIndex;
 

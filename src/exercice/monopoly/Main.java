@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main extends Application {
-    protected static Logger logger = Logger.getLogger("exercice.monopoly.Main");
+    private static final Logger logger = Logger.getLogger("exercice.monopoly.Main");
 
     private Scene scene;
 
@@ -101,13 +101,13 @@ public class Main extends Application {
             String lastPlayerName = gm.getPlayers().get(gm.getCurrentPlayerIndex()).getName();
             int lastPlayerIndex = gm.getCurrentPlayerIndex();
 
-            propertyViews.forEach(propertyView -> propertyView.removePlayerIndicator(lastPlayerIndex));
+            propertyViews.forEach(propertyView -> propertyView.hidePlayerIndicator(lastPlayerIndex));
 
             logger.log(Level.INFO, "== NEW TURN ==");
             GameManager.TurnResult turnResult = gm.RunTurn();
             btn.setText("Tour Suivant : " + gm.getPlayers().get(gm.getCurrentPlayerIndex()).getName());
 
-            propertyViews.get(turnResult.propertyLandedOn.getIndex()).addPlayerIndicator(lastPlayerIndex);
+            propertyViews.get(turnResult.propertyLandedOn.getIndex()).showPlayerIndicator(lastPlayerIndex);
 
             recap.getChildren().clear();
             for (int playerIndex = 0; playerIndex < gm.getPlayers().size(); playerIndex++) {
@@ -128,7 +128,7 @@ public class Main extends Application {
             if (turnResult.isPlayerGameOver) {
                 recapString.append("\n\n======\n\n");
                 recapString.append("Game Over pour ").append(lastPlayerName);
-                propertyViews.get(turnResult.propertyLandedOn.getIndex()).removePlayerIndicator(turnResult.playerIndex);
+                propertyViews.get(turnResult.propertyLandedOn.getIndex()).hidePlayerIndicator(turnResult.playerIndex);
                 propertyViews.forEach(pv -> pv.removePlayer(turnResult.playerIndex));
                 ColorList.removeColorAt(turnResult.playerIndex);
             }
@@ -152,9 +152,7 @@ public class Main extends Application {
         cb.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 if (fiveSecondsWonder == null) {
-                    fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(0.01), event -> {
-                        btn.fire();
-                    }));
+                    fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(0.01), event -> btn.fire()));
                     fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
                 }
                 fiveSecondsWonder.play();
@@ -188,7 +186,7 @@ public class Main extends Application {
                     double x = previousX + propertyWidth * direction.getX();
                     double y = previousY + propertyHeight * direction.getY();
 
-                    PropertyView propertyView = new PropertyView(propertyWidth, propertyHeight, x, y, gm.getBoard().getPropertiyAt(propertyIndex), gm.getPlayers().size(), propertyIndex == 0);
+                    PropertyView propertyView = new PropertyView(propertyWidth, propertyHeight, x, y, gm.getBoard().getPropertyAt(propertyIndex), gm.getPlayers().size(), propertyIndex == 0);
                     propertyViews.add(propertyView);
                     root.getChildren().add(propertyView.getGroup());
 
@@ -203,7 +201,7 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    public void gameOver() {
+    private void gameOver() {
         logger.log(Level.INFO, "====== GAME OVER =====");
         logger.log(Level.INFO, "The winner is " + gm.getPlayers().get(0).getName());
 

@@ -16,28 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * PropertyView class the view representing a property
  */
 public class PropertyView {
 
     //// Private Members ////
 
-    private Group group;
-    private Label indexLabel;
-    private Label ownerLabel;
-    private FlowPane playersIndicatorsPane;
-    private List<Circle> playersIndicators;
+    private final Group group;
+    private final Label ownerLabel;
+    private final List<Circle> playersIndicators;
 
     //// Constructors ////
 
     /**
-     * @param width
-     * @param height
-     * @param x
-     * @param y
-     * @param property
-     * @param nbPlayers
-     * @param arePlayerIndicatorsVisible
+     * @param width                      the width of the rectangle to display
+     * @param height                     the height of the rectangle to display
+     * @param x                          the x position
+     * @param y                          the y position
+     * @param property                   the Property that is being represented
+     * @param nbPlayers                  the number of players playing the game
+     * @param arePlayerIndicatorsVisible the flag dictating the visibility of the players indicators
      */
     public PropertyView(double width, double height, double x, double y, Property property, int nbPlayers, boolean arePlayerIndicatorsVisible) {
         group = new Group();
@@ -50,7 +48,7 @@ public class PropertyView {
         group.getChildren().add(rectangle);
 
         // Generate the label representing the index of the property
-        indexLabel = new Label("" + property.getIndex());
+        Label indexLabel = new Label("" + property.getIndex());
         indexLabel.setTextAlignment(TextAlignment.CENTER);
         indexLabel.setAlignment(Pos.CENTER);
         indexLabel.setPrefWidth(width);
@@ -68,7 +66,7 @@ public class PropertyView {
 
         // Generate the indicators for the players standing on this property
 
-        playersIndicatorsPane = new FlowPane(Orientation.HORIZONTAL);
+        FlowPane playersIndicatorsPane = new FlowPane(Orientation.HORIZONTAL);
         playersIndicatorsPane.setVgap(2);
         playersIndicatorsPane.setHgap(2);
         playersIndicatorsPane.setLayoutY(20);
@@ -93,28 +91,34 @@ public class PropertyView {
     //// Public Functions ////
 
     /**
-     * @return
+     * @return the group storing the visual representation of the property
      */
     public Group getGroup() {
         return group;
     }
 
     /**
-     * @param playerIndex
+     * Shows the indicator of the player represented by the index
+     *
+     * @param playerIndex the index of the player
      */
-    public void addPlayerIndicator(int playerIndex) {
+    public void showPlayerIndicator(int playerIndex) {
         playersIndicators.get(playerIndex).setVisible(true);
     }
 
     /**
-     * @param playerIndex
+     * Hides the indicator of the player represented by the index
+     *
+     * @param playerIndex the index of the player
      */
-    public void removePlayerIndicator(int playerIndex) {
+    public void hidePlayerIndicator(int playerIndex) {
         playersIndicators.get(playerIndex).setVisible(false);
     }
 
     /**
-     * @param playerIndex
+     * Removes the indicator of the player represented by the index
+     *
+     * @param playerIndex the index of the player
      */
     public void removePlayer(int playerIndex) {
         playersIndicators.remove(playerIndex);

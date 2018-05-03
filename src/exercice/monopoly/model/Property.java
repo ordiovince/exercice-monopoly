@@ -5,30 +5,30 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- *
+ * Property class representing a square on the board as a property
  */
 public class Property {
 
     //// Events ////
 
     /**
-     *
+     * Event raised when the owner of the property has changed
      */
-    public List<Consumer<Property>> ownerChanged;
+    public final List<Consumer<Property>> ownerChanged;
 
     //// Private Members ////
 
-    private int index;
-    private int price;
-    private int rent;
+    private final int index;
+    private final int price;
+    private final int rent;
     private Player owner;
 
     //// Constructors ////
 
     /**
-     * @param index
-     * @param price
-     * @param rent
+     * @param index the index of the property on the board
+     * @param price the price of the property
+     * @param rent  the price of the rent for the property
      */
     public Property(int index, int price, int rent) {
         this.index = index;
@@ -41,35 +41,37 @@ public class Property {
     //// Public Functions ////
 
     /**
-     * @return
+     * @return the index of the property on the board
      */
     public int getIndex() {
         return index;
     }
 
     /**
-     * @return
+     * @return the price of the property
      */
     public int getPrice() {
         return price;
     }
 
     /**
-     * @return
+     * @return the price of the rent for the property
      */
     public int getRent() {
         return rent;
     }
 
     /**
-     * @return
+     * @return the owner of the property
      */
     public Player getOwner() {
         return owner;
     }
 
     /**
-     * @param owner
+     * Changes the owner of the property
+     *
+     * @param owner the new owner of the property to set
      */
     public void setOwner(Player owner) {
         this.owner = owner;

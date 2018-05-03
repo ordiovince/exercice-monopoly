@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * GameManager class responsible for managing the game
  */
 public class GameManager {
 
     //// Private Members ////
 
-    private List<Player> players;
-    private Board board;
+    private final List<Player> players;
+    private final Board board;
     private int currentPlayerIndex;
 
     //// Constructors ////
 
     /**
-     * @param nbPlayers
-     * @param startingPlayerBalance
-     * @param nbProperties
-     * @param propertyCost
-     * @param propertyRent
+     * @param nbPlayers             the number of players for the game
+     * @param startingPlayerBalance the amount of money each player starts with
+     * @param nbProperties          the number of properties on the board
+     * @param propertyCost          the price of each property
+     * @param propertyRent          the price of the rent for each property
      */
     public GameManager(int nbPlayers, int startingPlayerBalance, int nbProperties, int propertyCost, int propertyRent) {
         board = new Board(nbProperties, propertyCost, propertyRent);
@@ -42,7 +42,9 @@ public class GameManager {
     //// Public Functions ////
 
     /**
-     * @return
+     * Run a turn for the game and pass to the next player
+     *
+     * @return the important values of the turn
      */
     public TurnResult RunTurn() {
         // Get the current player
@@ -61,7 +63,7 @@ public class GameManager {
 
         // Set the property the player is standing on
         currentPlayer.setCurrentPropertyIndex(propertyLandedOnIndex);
-        Property propertyLandedOn = getBoard().getPropertiyAt(propertyLandedOnIndex);
+        Property propertyLandedOn = getBoard().getPropertyAt(propertyLandedOnIndex);
 
         if (propertyLandedOn.getOwner() == null) {
             // If the property is not owned by anyone
@@ -100,54 +102,58 @@ public class GameManager {
     }
 
     /**
-     * @return
+     * @return the index of the current player
      */
     public int getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }
 
     /**
-     * @return
+     * @return the list of players
      */
     public List<Player> getPlayers() {
         return players;
     }
 
     /**
-     * @return
+     * @return the game board
      */
     public Board getBoard() {
         return board;
     }
 
     /**
-     *
+     * TurnResult class representing the most important values of the turn
      */
     public class TurnResult {
-        /**
-         *
-         */
-        public int playerIndex;
-        /**
-         *
-         */
-        public Property propertyLandedOn;
-        /**
-         *
-         */
-        public int diceRoll;
-        /**
-         *
-         */
-        public boolean isPlayerGameOver;
 
         /**
-         * @param playerIndex
-         * @param propertyLandedOn
-         * @param diceRoll
-         * @param isPlayerGameOver
+         * The index of the player that played this turn
          */
-        public TurnResult(int playerIndex, Property propertyLandedOn, int diceRoll, boolean isPlayerGameOver) {
+        public final int playerIndex;
+
+        /**
+         * The property the player as landed on
+         */
+        public final Property propertyLandedOn;
+
+        /**
+         * The score rolled by the player
+         */
+        public final int diceRoll;
+
+        /**
+         * The state of the player gameOver (true is the game is over for the player as a result of this turn)
+         */
+        public final boolean isPlayerGameOver;
+
+        /**
+         * @param playerIndex      the index of the player that played this turn
+         * @param propertyLandedOn the property the player as landed on
+         * @param diceRoll         the score rolled by the player
+         * @param isPlayerGameOver the state of the player gameOver (true is the game is over for the player as a result of this turn)
+         */
+        private TurnResult(int playerIndex, Property propertyLandedOn, int diceRoll, boolean isPlayerGameOver) {
             this.playerIndex = playerIndex;
             this.propertyLandedOn = propertyLandedOn;
             this.diceRoll = diceRoll;
